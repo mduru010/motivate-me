@@ -29,7 +29,7 @@ export default function HeroTwo() {
         </p>
         </h1>
 
-        <div className='pl-44'>
+        <div className=''>
     <ul className="mt-8 space-y-3 font-medium">
         <li className="flex items-center lg:col-span-1">
             <div className="flex-shrink-0">
