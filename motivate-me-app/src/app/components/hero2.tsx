@@ -29,8 +29,8 @@ export default function HeroTwo() {
         </p>
         </h1>
 
-        <div className=''>
-    <ul className="mt-8 space-y-3 font-medium">
+        <div className='align-center'>
+    <ul className="inline-block mt-8 space-y-3 font-medium">
         <li className="flex items-center lg:col-span-1">
             <div className="flex-shrink-0">
                 <svg className="w-5 h-5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
