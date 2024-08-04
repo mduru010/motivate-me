@@ -50,7 +50,7 @@ const quests = [
 
 const DashboardTwo = () => {
   const [tasks, setTasks] = useState([
-    { id: 1, text: 'Kiss up to the Sarge', done: false },
+    { id: 1, text: 'Kiss up to the Sarge (Daily Task)', done: false },
   ]);
   const [sargeMessage, setSargeMessage] = useState("Let's get to work!");
   const [newTask, setNewTask] = useState('');
@@ -85,17 +85,17 @@ const DashboardTwo = () => {
       switch (quest.id) {
         case 1:
           if (completedTasks >= 3 && !quest.completed) {
-            return { ...quest, completed: true, reward: 'New Roast' };
+            return { ...quest, completed: true, reward: 'This mungus ;)' };
           }
           break;
         case 2:
           if (completedTasks >= 5 && !quest.completed) {
-            return { ...quest, completed: true, reward: 'Funny Animation' };
+            return { ...quest, completed: true, reward: 'Nothing. Haha.' };
           }
           break;
         case 3:
           if (completedTasks / allTasks === 1 && !quest.completed) {
-            return { ...quest, completed: true, reward: 'Unlock New Theme' };
+            return { ...quest, completed: true, reward: 'Your mom hehe.' };
           }
           break;
         default:
@@ -231,7 +231,7 @@ const DashboardTwo = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8 text-black">
       <div className="mb-6 flex justify-between items-center">
-        <div className="text-3xl font-bold mb-2">Dashboard</div>
+        <div className="text-3xl font-bold mb-2">Motivate Me Sarge</div>
         <select
           value={selectedTheme}
           onChange={(e) => setSelectedTheme(e.target.value as ThemeName)}
@@ -255,7 +255,7 @@ const DashboardTwo = () => {
           />
         </div>
         <div>
-          <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
+          <h1 className="text-3xl font-bold mb-2">Sgt. Hugh Mungus Says...</h1>
           <p className="text-lg">{sargeMessage}</p>
           <p className='text-lg'>Sarge is {mood}!</p>
         </div>

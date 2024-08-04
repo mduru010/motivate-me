@@ -10,7 +10,8 @@ const Dashboard = () => {
 
   return (
     <>
-    <DashboardComp></DashboardComp>
+    {/* <DashboardComp></DashboardComp> */}
+    <DashboardTwo/>
     </>
   );
 };

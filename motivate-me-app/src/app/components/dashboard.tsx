@@ -20,7 +20,7 @@ export default function DashboardComp() {
             <div className={`${sidebarOpen ? "block" : "hidden"} md:block md:w-64 bg-white md:flex-shrink-0`}>
                 <div className="flex flex-col h-full pt-5 overflow-y-auto">
                     <div className="flex items-center justify-center md:justify-start px-4">
-                        <img className="w-auto h-8" src="https://landingfoliocom.imgix.net/store/collection/clarity-dashboard/images/logo.svg" alt="Logo" />
+                        <h1 className="text-black">Motivate Me Sarge</h1>
                     </div>
 
                     <div className="px-4 mt-8">
