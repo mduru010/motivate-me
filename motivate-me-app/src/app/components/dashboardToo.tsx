@@ -1,18 +1,69 @@
 import { useState, useEffect } from 'react';
 
+// Define a type for the theme names
+type ThemeName = 'default' | 'space' | 'superhero';
+
+const themes: Record<ThemeName, {
+  moodColors: {
+    happy: string;
+    meh: string;
+    angry: string;
+  };
+  buttonColor: string;
+  buttonHoverColor: string;
+}> = {
+  default: {
+    moodColors: {
+      happy: 'bg-green-500',
+      meh: 'bg-yellow-500',
+      angry: 'bg-red-500'
+    },
+    buttonColor: 'bg-blue-500',
+    buttonHoverColor: 'bg-blue-600',
+  },
+  space: {
+    moodColors: {
+      happy: 'bg-purple-500',
+      meh: 'bg-blue-500',
+      angry: 'bg-red-800'
+    },
+    buttonColor: 'bg-teal-500',
+    buttonHoverColor: 'bg-teal-600',
+  },
+  superhero: {
+    moodColors: {
+      happy: 'bg-yellow-500',
+      meh: 'bg-blue-700',
+      angry: 'bg-gray-700'
+    },
+    buttonColor: 'bg-red-500',
+    buttonHoverColor: 'bg-red-600',
+  }
+};
+
+// Define quests
+const quests = [
+  { id: 1, description: 'Complete 3 tasks today', reward: 'New Roast', completed: false },
+  { id: 2, description: 'Finish 5 tasks this week', reward: 'Funny Animation', completed: false },
+  { id: 3, description: 'Achieve 100% progress in a day', reward: 'Unlock New Theme', completed: false },
+];
+
 const DashboardTwo = () => {
   const [tasks, setTasks] = useState([
     { id: 1, text: 'Kiss up to the Sarge', done: false },
   ]);
   const [sargeMessage, setSargeMessage] = useState("Let's get to work!");
   const [newTask, setNewTask] = useState('');
+  const [selectedTheme, setSelectedTheme] = useState<ThemeName>('default');
+  const [questStatus, setQuestStatus] = useState(quests);
 
   const handleTaskToggle = (taskId: number) => {
-    const updatedTasks = tasks.map((task) => 
+    const updatedTasks = tasks.map((task) =>
       task.id === taskId ? { ...task, done: !task.done } : task
     );
 
     setTasks(updatedTasks);
+    updateQuests(updatedTasks);
   };
 
   const handleAddTask = () => {
@@ -24,6 +75,35 @@ const DashboardTwo = () => {
     const newTaskObj = { id: tasks.length + 1, text: newTask, done: false };
     setTasks([...tasks, newTaskObj]);
     setNewTask('');
+    updateQuests([...tasks, newTaskObj]);
+  };
+
+  const updateQuests = (updatedTasks: { id: number; text: string; done: boolean }[]) => {
+    const completedTasks = updatedTasks.filter(task => task.done).length;
+    const allTasks = updatedTasks.length;
+    const questUpdates = questStatus.map(quest => {
+      switch (quest.id) {
+        case 1:
+          if (completedTasks >= 3 && !quest.completed) {
+            return { ...quest, completed: true, reward: 'New Roast' };
+          }
+          break;
+        case 2:
+          if (completedTasks >= 5 && !quest.completed) {
+            return { ...quest, completed: true, reward: 'Funny Animation' };
+          }
+          break;
+        case 3:
+          if (completedTasks / allTasks === 1 && !quest.completed) {
+            return { ...quest, completed: true, reward: 'Unlock New Theme' };
+          }
+          break;
+        default:
+          return quest;
+      }
+      return quest;
+    });
+    setQuestStatus(questUpdates);
   };
 
   const progress = (tasks.filter((task) => task.done).length / tasks.length) * 100;
@@ -122,19 +202,19 @@ const DashboardTwo = () => {
 
     if (progress === 100) {
       return {
-        moodColor: 'bg-green-500',
+        moodColor: themes[selectedTheme].moodColors.happy,
         mood: 'happy',
         message: getRandomMessage(happyMessages)
       };
     } else if (progress >= 50) {
       return {
-        moodColor: 'bg-yellow-500',
+        moodColor: themes[selectedTheme].moodColors.meh,
         mood: 'meh',
         message: getRandomMessage(mehMessages)
       };
     } else {
       return {
-        moodColor: 'bg-red-500',
+        moodColor: themes[selectedTheme].moodColors.angry,
         mood: 'angry',
         message: getRandomMessage(angryMessages)
       };
@@ -144,12 +224,27 @@ const DashboardTwo = () => {
   useEffect(() => {
     const { message } = getSargeMood();
     setSargeMessage(message);
-  }, [tasks]); // Update message whenever tasks change
+  }, [tasks, selectedTheme]); // Update message whenever tasks or theme change
 
   const { moodColor, mood, message } = getSargeMood();
 
   return (
     <div className="min-h-screen bg-gray-100 p-8 text-black">
+      <div className="mb-6 flex justify-between items-center">
+        <div className="text-3xl font-bold mb-2">Dashboard</div>
+        <select
+          value={selectedTheme}
+          onChange={(e) => setSelectedTheme(e.target.value as ThemeName)}
+          className="p-2 border rounded-lg"
+        >
+          {Object.keys(themes).map((theme) => (
+            <option key={theme} value={theme}>
+              {theme.charAt(0).toUpperCase() + theme.slice(1)}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className={`mb-6 p-6 ${moodColor} text-white flex items-center rounded-t-lg`}>
         <div className="mr-4">
           {/* Mood Image - Replace with actual Sarge images based on mood */}
@@ -162,7 +257,7 @@ const DashboardTwo = () => {
         <div>
           <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
           <p className="text-lg">{sargeMessage}</p>
-          <p className='text-lg'>Sarge is {mood}</p>
+          <p className='text-lg'>Sarge is {mood}!</p>
         </div>
       </div>
 
@@ -199,11 +294,26 @@ const DashboardTwo = () => {
           />
           <button
             onClick={handleAddTask}
-            className="ml-3 p-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600"
+            className={`ml-3 p-3 ${themes[selectedTheme].buttonColor} text-white rounded-lg shadow hover:${themes[selectedTheme].buttonHoverColor}`}
           >
             Add Task
           </button>
         </div>
+      </div>
+
+      <div className="mb-6 p-6 bg-white shadow-md rounded-lg">
+        <h2 className="text-2xl font-semibold mb-4">Sarge’s Daily Quests</h2>
+        <ul>
+          {questStatus.map((quest) => (
+            <li
+              key={quest.id}
+              className={`mb-3 p-4 rounded-lg ${quest.completed ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}
+            >
+              <p className={`text-lg ${quest.completed ? 'line-through' : ''}`}>{quest.description}</p>
+              {quest.completed && <p className="mt-2 text-sm text-gray-600">Reward: {quest.reward}</p>}
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div className="p-6 bg-white shadow-md rounded-lg">
@@ -226,4 +336,3 @@ const DashboardTwo = () => {
 };
 
 export default DashboardTwo;
-
