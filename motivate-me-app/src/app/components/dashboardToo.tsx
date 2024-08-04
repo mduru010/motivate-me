@@ -245,8 +245,8 @@ const DashboardTwo = () => {
         </select>
       </div>
 
-      <div className={`mb-6 p-6 ${moodColor} text-white flex items-center rounded-t-lg`}>
-        <div className="mr-4">
+      <div className={`flex-col justify-center items-center	text-center b-6 p-6 ${moodColor} text-white flex items-center rounded-t-lg`}>
+        <div className="m-1">
           {/* Mood Image - Replace with actual Sarge images based on mood */}
           <img
             src={`./sarge.gif`} // Replace with actual path
